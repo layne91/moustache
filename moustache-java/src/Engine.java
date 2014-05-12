@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -7,44 +8,46 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
-public class Engine {
+public class Engine extends JFrame {
 
-	private final String SETTINGS_SEPARATOR = "=";
+	public static final String SETTINGS_SEPARATOR = "=";
 
 	// maybe have second value a custom object to hold any type of data
 	// will have to see how settings are
 	private HashMap<String, String> settings;
-
-	private JFrame frame;
+	private Renderer renderer;
 
 	public Engine() {
-		initializeVariables();
 		initializeSettings();
 		initializeFrame();
-	}
 
+		renderer.setBackground(Color.BLACK);
+		
+	}
+	
 	private void initializeFrame() {
-		frame = new JFrame();
-		frame.setTitle(settings.get("title"));
-		frame.setPreferredSize(new Dimension(Integer.parseInt(settings
-				.get("width")), Integer.parseInt(settings.get("height"))));
-		frame.setMinimumSize(new Dimension(Integer.parseInt(settings
-				.get("width")), Integer.parseInt(settings.get("height"))));
-		frame.setMaximumSize(new Dimension(Integer.parseInt(settings
-				.get("width")), Integer.parseInt(settings.get("height"))));
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-	}
+		setTitle(settings.get("title"));
+		setPreferredSize(new Dimension(Integer.parseInt(settings.get("width")),
+				Integer.parseInt(settings.get("height"))));
+		setMinimumSize(new Dimension(Integer.parseInt(settings.get("width")),
+				Integer.parseInt(settings.get("height"))));
+		setMaximumSize(new Dimension(Integer.parseInt(settings.get("width")),
+				Integer.parseInt(settings.get("height"))));
 
-	private void initializeVariables() {
-		settings = new HashMap<String, String>();
+		renderer = new Renderer(settings);
+		add(renderer);
+
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 	}
 
 	// could maybe write a general file read function to use that for this
 	// instead
 	private void initializeSettings() {
 		// load settings.ini
-
+		settings = new HashMap<String, String>();
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(getClass().getResource(
@@ -57,6 +60,7 @@ public class Engine {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	private void setSetting(String setting) {
