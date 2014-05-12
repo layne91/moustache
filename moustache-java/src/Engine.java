@@ -12,8 +12,6 @@ public class Engine extends JFrame {
 
 	public static final String SETTINGS_SEPARATOR = "=";
 
-	// maybe have second value a custom object to hold any type of data
-	// will have to see how settings are
 	private HashMap<String, String> settings;
 	private Renderer renderer;
 
@@ -22,9 +20,16 @@ public class Engine extends JFrame {
 		initializeFrame();
 
 		renderer.setBackground(Color.BLACK);
-		
+
+		render();
 	}
-	
+
+	private void render() {
+		while (true) {
+			renderer.update();
+		}
+	}
+
 	private void initializeFrame() {
 		setTitle(settings.get("title"));
 		setPreferredSize(new Dimension(Integer.parseInt(settings.get("width")),
